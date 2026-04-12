@@ -1,0 +1,55 @@
+{
+  "updatedAt": "2026-04-12T12:22:44.187Z",
+  "repos": [
+    {
+      "name": "esp32-emu-turbo",
+      "description": "Handheld retro gaming console based on ESP32-S3 for NES and SNES emulation",
+      "homepageUrl": "https://pjcau.github.io/esp32-emu-turbo/",
+      "repoUrl": "https://github.com/pjcau/esp32-emu-turbo",
+      "pushedAt": "2026-04-12T12:16:46Z",
+      "language": "C",
+      "stars": 3,
+      "topics": []
+    },
+    {
+      "name": "agent-orchestrator",
+      "description": "Provider-agnostic AI agent orchestration framework — swap LLM providers, route by cost, mix cloud and local models",
+      "homepageUrl": "https://pjcau.github.io/agent-orchestrator/",
+      "repoUrl": "https://github.com/pjcau/agent-orchestrator",
+      "pushedAt": "2026-04-12T03:09:10Z",
+      "language": "Python",
+      "stars": 0,
+      "topics": []
+    },
+    {
+      "name": "activity-plan-2026",
+      "description": "",
+      "homepageUrl": "https://site-xi-dusky-92.vercel.app",
+      "repoUrl": "https://github.com/pjcau/activity-plan-2026",
+      "pushedAt": "2026-04-03T15:17:59Z",
+      "language": "TypeScript",
+      "stars": 0,
+      "topics": []
+    },
+    {
+      "name": "AgentsBoard",
+      "description": "AI Agent Mission Control — Native macOS app for orchestrating Claude Code, Codex, Aider & Gemini agents side by side",
+      "homepageUrl": "https://pjcau.github.io/AgentsBoard/",
+      "repoUrl": "https://github.com/pjcau/AgentsBoard",
+      "pushedAt": "2026-03-27T14:20:49Z",
+      "language": "Swift",
+      "stars": 0,
+      "topics": []
+    },
+    {
+      "name": "ollama_pdf_rag",
+      "description": "A demo Jupyter Notebook showcasing a simple local RAG (Retrieval Augmented Generation) pipeline to chat with your PDFs.",
+      "homepageUrl": "https://tonykipkemboi.github.io/ollama_pdf_rag/",
+      "repoUrl": "https://github.com/pjcau/ollama_pdf_rag",
+      "pushedAt": "2025-03-18T21:05:20Z",
+      "language": "Jupyter Notebook",
+      "stars": 0,
+      "topics": []
+    }
+  ]
+}
