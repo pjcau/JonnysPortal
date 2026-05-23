@@ -38,5 +38,12 @@ jobs:
           fi
 
       - name: Trigger Vercel deploy hook
-        if: steps.commit_data.outputs.changed == 'true' && secrets.VERCEL_DEPLOY_HOOK_URL != ''
-        run: curl -fsS -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"
+        if: steps.commit_data.outputs.changed == 'true'
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
+          else
+            echo "VERCEL_DEPLOY_HOOK_URL not configured; skipping deploy hook."
+          fi
