@@ -5,6 +5,19 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const GITHUB_USER = "pjcau";
 const OUTPUT_PATH = join(__dirname, "..", "src", "data", "repos.json");
+// All public (non-fork) repos created from this date onwards are included
+const MIN_CREATED_AT = new Date("2025-01-01T00:00:00Z");
+
+function isDeployedHomepage(url) {
+  if (!url || url.trim() === "") return false;
+  const lower = url.toLowerCase();
+  return (
+    lower.includes("github.io") ||
+    lower.includes("vercel.app") ||
+    lower.includes("vercel.") ||
+    lower.includes("netlify")
+  );
+}
 
 async function fetchRepos() {
   const token = process.env.GITHUB_TOKEN;
@@ -35,24 +48,24 @@ async function fetchRepos() {
     page++;
   }
 
-  // Filter: only repos with a homepage that looks like GitHub Pages or Vercel
+  // Inclusion rules:
+  //   - forks are always excluded (only repos created by the user)
+  //   - every public repo created on/after MIN_CREATED_AT is included,
+  //     with or without a homepage
+  //   - older repos are included only if they have a deployed homepage
+  //     (GitHub Pages / Vercel / Netlify)
   const deployed = allRepos
     .filter((r) => {
-      const url = r.homepage;
-      if (!url || url.trim() === "") return false;
-      const lower = url.toLowerCase();
-      return (
-        lower.includes("github.io") ||
-        lower.includes("vercel.app") ||
-        lower.includes("vercel.") ||
-        lower.includes("netlify")
-      );
+      if (r.fork) return false;
+      if (new Date(r.created_at) >= MIN_CREATED_AT) return true;
+      return isDeployedHomepage(r.homepage);
     })
     .map((r) => ({
       name: r.name,
       description: r.description || "",
-      homepageUrl: r.homepage,
+      homepageUrl: r.homepage?.trim() || null,
       repoUrl: r.html_url,
+      createdAt: r.created_at,
       pushedAt: r.pushed_at,
       language: r.language,
       stars: r.stargazers_count,
@@ -66,7 +79,7 @@ async function fetchRepos() {
   };
 
   writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2));
-  console.log(`Fetched ${deployed.repos?.length ?? deployed.length} deployed repos (${allRepos.length} total scanned)`);
+  console.log(`Fetched ${deployed.length} repos (${allRepos.length} total scanned)`);
 }
 
 fetchRepos().catch((err) => {

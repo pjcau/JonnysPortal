@@ -3,8 +3,9 @@ import data from "@/data/repos.json";
 type Repo = {
   name: string;
   description: string;
-  homepageUrl: string;
+  homepageUrl: string | null;
   repoUrl: string;
+  createdAt: string;
   pushedAt: string;
   language: string | null;
   stars: number;
@@ -60,7 +61,7 @@ export default function Home() {
             Jonny&apos;s Portal
           </h1>
           <p className="mt-2 text-zinc-500 dark:text-zinc-400">
-            Deployed projects, sorted by latest activity
+            Public projects since 2025, sorted by latest activity
           </p>
           <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
             Last update: {updatedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
@@ -72,7 +73,7 @@ export default function Home() {
       <main className="mx-auto max-w-4xl px-6 py-8">
         <div className="grid gap-4">
           {repos.map((repo) => {
-            const deploy = deploymentType(repo.homepageUrl);
+            const deploy = repo.homepageUrl ? deploymentType(repo.homepageUrl) : null;
             return (
               <article
                 key={repo.name}
@@ -84,9 +85,11 @@ export default function Home() {
                       <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                         {repo.name}
                       </h2>
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${deploy.color}`}>
-                        {deploy.label}
-                      </span>
+                      {deploy && (
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${deploy.color}`}>
+                          {deploy.label}
+                        </span>
+                      )}
                     </div>
                     {repo.description && (
                       <p className="mt-1.5 text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
@@ -110,17 +113,19 @@ export default function Home() {
                 </div>
 
                 <div className="mt-4 flex gap-3">
-                  <a
-                    href={repo.homepageUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
-                  >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    Visit Site
-                  </a>
+                  {repo.homepageUrl && (
+                    <a
+                      href={repo.homepageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      Visit Site
+                    </a>
+                  )}
                   <a
                     href={repo.repoUrl}
                     target="_blank"
