@@ -8,6 +8,11 @@ const OUTPUT_PATH = join(__dirname, "..", "src", "data", "repos.json");
 // All public (non-fork) repos created from this date onwards are included
 const MIN_CREATED_AT = new Date("2025-01-01T00:00:00Z");
 
+const DEPLOY_HOSTS_RE = new RegExp(
+  `https?://(?:${GITHUB_USER}\\.github\\.io|[a-z0-9.-]+\\.(?:vercel\\.app|netlify\\.app))(?:/[^\\s)"'<>\\]]*)?`,
+  "gi",
+);
+
 function isDeployedHomepage(url) {
   if (!url || url.trim() === "") return false;
   const lower = url.toLowerCase();
@@ -27,6 +32,33 @@ async function fetchRepos() {
   };
   if (token) {
     headers.Authorization = `Bearer ${token}`;
+  }
+
+  // Resolve the deploy URL of a repo, in priority order:
+  //   1. the GitHub "homepage" field, if set
+  //   2. the first GitHub Pages / Vercel / Netlify link found in the README
+  //      (only links under the user's own github.io are accepted)
+  //   3. GitHub Pages enabled on the repo -> https://<user>.github.io/<repo>/
+  //      (or https://<user>.github.io/ for the user site repo)
+  async function resolveHomepage(r) {
+    const explicit = r.homepage?.trim();
+    if (explicit) return explicit;
+
+    const res = await fetch(`https://api.github.com/repos/${r.full_name}/readme`, {
+      headers: { ...headers, Accept: "application/vnd.github.raw" },
+    });
+    if (res.ok) {
+      const match = (await res.text()).match(DEPLOY_HOSTS_RE);
+      if (match) return match[0];
+    }
+
+    if (r.has_pages) {
+      // The user site repo (<user>.github.io) is served at the root
+      return r.name === `${GITHUB_USER}.github.io`
+        ? `https://${GITHUB_USER}.github.io/`
+        : `https://${GITHUB_USER}.github.io/${r.name}/`;
+    }
+    return null;
   }
 
   let allRepos = [];
@@ -54,16 +86,26 @@ async function fetchRepos() {
   //     with or without a homepage
   //   - older repos are included only if they have a deployed homepage
   //     (GitHub Pages / Vercel / Netlify)
-  const deployed = allRepos
+  // Only repos that can pass the filter below need a resolved homepage
+  // (keeps README requests low for unauthenticated runs).
+  const candidates = allRepos.filter(
+    (r) =>
+      !r.fork &&
+      (new Date(r.created_at) >= MIN_CREATED_AT || r.has_pages || isDeployedHomepage(r.homepage)),
+  );
+  for (const r of candidates) {
+    r.resolvedHomepage = await resolveHomepage(r);
+  }
+
+  const deployed = candidates
     .filter((r) => {
-      if (r.fork) return false;
       if (new Date(r.created_at) >= MIN_CREATED_AT) return true;
-      return isDeployedHomepage(r.homepage);
+      return isDeployedHomepage(r.resolvedHomepage);
     })
     .map((r) => ({
       name: r.name,
       description: r.description || "",
-      homepageUrl: r.homepage?.trim() || null,
+      homepageUrl: r.resolvedHomepage,
       repoUrl: r.html_url,
       createdAt: r.created_at,
       pushedAt: r.pushed_at,
