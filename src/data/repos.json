@@ -1,24 +1,13 @@
 {
-  "updatedAt": "2026-10-04T09:19:39.875Z",
+  "updatedAt": "2026-10-05T09:59:50.028Z",
   "repos": [
-    {
-      "name": "pikiosk",
-      "description": "",
-      "homepageUrl": null,
-      "repoUrl": "https://github.com/pjcau/pikiosk",
-      "createdAt": "2026-06-23T20:19:38Z",
-      "pushedAt": "2026-10-04T09:18:40Z",
-      "language": "Shell",
-      "stars": 0,
-      "topics": []
-    },
     {
       "name": "agent-orchestrator",
       "description": "Provider-agnostic AI agent orchestration framework — swap LLM providers, route by cost, mix cloud and local models",
       "homepageUrl": "https://pjcau.github.io/agent-orchestrator/",
       "repoUrl": "https://github.com/pjcau/agent-orchestrator",
       "createdAt": "2026-03-05T12:41:16Z",
-      "pushedAt": "2026-10-04T07:48:13Z",
+      "pushedAt": "2026-10-05T08:24:48Z",
       "language": "Python",
       "stars": 0,
       "topics": []
@@ -29,9 +18,9 @@
       "homepageUrl": "https://pjcau.github.io/esp32-emu-turbo/",
       "repoUrl": "https://github.com/pjcau/esp32-emu-turbo",
       "createdAt": "2026-02-08T12:28:18Z",
-      "pushedAt": "2026-10-04T07:18:05Z",
+      "pushedAt": "2026-10-04T21:17:57Z",
       "language": "C",
-      "stars": 4,
+      "stars": 5,
       "topics": []
     },
     {
@@ -40,9 +29,20 @@
       "homepageUrl": null,
       "repoUrl": "https://github.com/pjcau/xtensa-68000-dynarec",
       "createdAt": "2026-09-30T18:09:36Z",
-      "pushedAt": "2026-10-03T19:46:32Z",
+      "pushedAt": "2026-10-04T15:23:52Z",
       "language": "C",
-      "stars": 1,
+      "stars": 3,
+      "topics": []
+    },
+    {
+      "name": "pikiosk",
+      "description": "",
+      "homepageUrl": null,
+      "repoUrl": "https://github.com/pjcau/pikiosk",
+      "createdAt": "2026-06-23T20:19:38Z",
+      "pushedAt": "2026-10-04T10:17:30Z",
+      "language": "Shell",
+      "stars": 0,
       "topics": []
     },
     {
@@ -51,7 +51,7 @@
       "homepageUrl": "https://jonnys-portal.vercel.app",
       "repoUrl": "https://github.com/pjcau/JonnysPortal",
       "createdAt": "2026-04-12T12:25:19Z",
-      "pushedAt": "2026-10-03T08:51:09Z",
+      "pushedAt": "2026-10-04T09:19:41Z",
       "language": "TypeScript",
       "stars": 0,
       "topics": []
@@ -196,7 +196,7 @@
       "createdAt": "2026-02-03T14:21:41Z",
       "pushedAt": "2026-02-07T23:58:32Z",
       "language": "Python",
-      "stars": 0,
+      "stars": 1,
       "topics": []
     },
     {
